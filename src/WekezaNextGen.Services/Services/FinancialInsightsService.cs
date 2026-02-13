@@ -83,7 +83,7 @@ public class FinancialInsightsService : IFinancialInsightsService
             
             // Generate insights based on spending patterns
             var totalExpenses = categorized
-                .Where(t => t.Type == Shared.Models.TransactionType.Debit)
+                .Where(t => t.Type?.ToLower() == "debit")
                 .Sum(t => t.Amount);
 
             if (totalExpenses > 0)
@@ -92,7 +92,7 @@ public class FinancialInsightsService : IFinancialInsightsService
             }
 
             var topCategory = categorized
-                .Where(t => t.Type == Shared.Models.TransactionType.Debit)
+                .Where(t => t.Type?.ToLower() == "debit")
                 .GroupBy(t => t.Category)
                 .OrderByDescending(g => g.Sum(t => t.Amount))
                 .FirstOrDefault();
@@ -133,7 +133,7 @@ public class FinancialInsightsService : IFinancialInsightsService
 
             // Factor 1: Balance relative to average monthly expenses (max +20)
             var monthlyExpenses = transactions
-                .Where(t => t.Type == Shared.Models.TransactionType.Debit)
+                .Where(t => t.Type?.ToLower() == "debit")
                 .Sum(t => t.Amount) / 3m;
 
             if (monthlyExpenses > 0)
@@ -144,10 +144,10 @@ public class FinancialInsightsService : IFinancialInsightsService
 
             // Factor 2: Income vs Expenses ratio (max +20)
             var totalIncome = transactions
-                .Where(t => t.Type == Shared.Models.TransactionType.Credit)
+                .Where(t => t.Type?.ToLower() == "credit")
                 .Sum(t => t.Amount);
             var totalExpenses = transactions
-                .Where(t => t.Type == Shared.Models.TransactionType.Debit)
+                .Where(t => t.Type?.ToLower() == "debit")
                 .Sum(t => t.Amount);
 
             if (totalExpenses > 0)
@@ -158,7 +158,7 @@ public class FinancialInsightsService : IFinancialInsightsService
 
             // Factor 3: Transaction consistency (max +10)
             var transactionDays = transactions
-                .Select(t => t.TransactionDate.Date)
+                .Select(t => t.ProcessedAt.Date)
                 .Distinct()
                 .Count();
             score += Math.Min(10, transactionDays / 9);
@@ -175,11 +175,11 @@ public class FinancialInsightsService : IFinancialInsightsService
     private MonthlySpendingDto CalculateMonthlySpending(List<Shared.Models.Transaction> transactions)
     {
         var income = transactions
-            .Where(t => t.Type == Shared.Models.TransactionType.Credit)
+            .Where(t => t.Type?.ToLower() == "credit")
             .Sum(t => t.Amount);
 
         var expenses = transactions
-            .Where(t => t.Type == Shared.Models.TransactionType.Debit)
+            .Where(t => t.Type?.ToLower() == "debit")
             .Sum(t => t.Amount);
 
         return new MonthlySpendingDto
@@ -195,7 +195,7 @@ public class FinancialInsightsService : IFinancialInsightsService
     private List<CategorySpendingDto> CalculateSpendingByCategory(List<Shared.Models.Transaction> transactions)
     {
         var expenses = transactions
-            .Where(t => t.Type == Shared.Models.TransactionType.Debit)
+            .Where(t => t.Type?.ToLower() == "debit")
             .ToList();
 
         var totalExpenses = expenses.Sum(t => t.Amount);

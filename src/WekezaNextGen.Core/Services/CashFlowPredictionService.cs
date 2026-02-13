@@ -83,8 +83,9 @@ public class CashFlowPredictionService : ICashFlowPredictionService
 
         foreach (var transaction in transactions)
         {
-            var date = transaction.TransactionDate.Date;
-            var amount = transaction.Type == Shared.Models.TransactionType.Credit 
+            var date = transaction.ProcessedAt.Date;
+            // Type is now a string: "Credit" or "Debit"
+            var amount = transaction.Type?.ToLower() == "credit" 
                 ? transaction.Amount 
                 : -transaction.Amount;
 

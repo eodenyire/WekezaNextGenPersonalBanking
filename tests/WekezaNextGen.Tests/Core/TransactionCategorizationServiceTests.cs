@@ -23,7 +23,7 @@ public class TransactionCategorizationServiceTests
         // Arrange
         var transaction = new Transaction
         {
-            Id = "1",
+            Id = Guid.NewGuid(),
             Description = "Pizza Hut Order",
             Amount = 500
         };
@@ -41,7 +41,7 @@ public class TransactionCategorizationServiceTests
         // Arrange
         var transaction = new Transaction
         {
-            Id = "2",
+            Id = Guid.NewGuid(),
             Description = "Uber ride to town",
             Amount = 200
         };
@@ -59,7 +59,7 @@ public class TransactionCategorizationServiceTests
         // Arrange
         var transaction = new Transaction
         {
-            Id = "3",
+            Id = Guid.NewGuid(),
             Description = "Some purchase",
             Category = "CustomCategory",
             Amount = 100
@@ -78,7 +78,7 @@ public class TransactionCategorizationServiceTests
         // Arrange
         var transaction = new Transaction
         {
-            Id = "4",
+            Id = Guid.NewGuid(),
             Description = "Random transaction xyz",
             Amount = 100
         };
@@ -96,9 +96,9 @@ public class TransactionCategorizationServiceTests
         // Arrange
         var transactions = new List<Transaction>
         {
-            new Transaction { Id = "1", Description = "Pizza order", Amount = 500 },
-            new Transaction { Id = "2", Description = "Uber ride", Amount = 200 },
-            new Transaction { Id = "3", Description = "Unknown", Amount = 100 }
+            new Transaction { Id = Guid.NewGuid(), Description = "Pizza order", Amount = 500 },
+            new Transaction { Id = Guid.NewGuid(), Description = "Uber ride", Amount = 200 },
+            new Transaction { Id = Guid.NewGuid(), Description = "Unknown", Amount = 100 }
         };
 
         // Act
