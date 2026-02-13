@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/WekezaNextGen.Api/WekezaNextGen.Api.csproj" />
+    <Project Path="src/WekezaNextGen.Core/WekezaNextGen.Core.csproj" />
+    <Project Path="src/WekezaNextGen.Integration/WekezaNextGen.Integration.csproj" />
+    <Project Path="src/WekezaNextGen.Services/WekezaNextGen.Services.csproj" />
+    <Project Path="src/WekezaNextGen.Shared/WekezaNextGen.Shared.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/WekezaNextGen.Tests/WekezaNextGen.Tests.csproj" />
+  </Folder>
+</Solution>
