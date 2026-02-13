@@ -32,6 +32,11 @@ builder.Services.AddScoped<ICashFlowPredictionService, CashFlowPredictionService
 // Register Application Services
 builder.Services.AddScoped<IFinancialInsightsService, FinancialInsightsService>();
 
+// Register Revolutionary AI Services - World-First Features 🚀
+builder.Services.AddScoped<IWhatIfSimulatorService, WhatIfSimulatorService>();
+builder.Services.AddScoped<IFinancialDnaAnalyzerService, FinancialDnaAnalyzerService>();
+builder.Services.AddScoped<IFinancialStressDetectorService, FinancialStressDetectorService>();
+
 // Add CORS policy for development
 builder.Services.AddCors(options =>
 {
