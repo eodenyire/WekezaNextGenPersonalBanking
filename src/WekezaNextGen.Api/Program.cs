@@ -4,6 +4,8 @@ using WekezaNextGen.Integration.Clients;
 using WekezaNextGen.Integration.Interfaces;
 using WekezaNextGen.Services.Interfaces;
 using WekezaNextGen.Services.Services;
+using Polly;
+using Polly.Extensions.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +22,32 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// Define Enterprise-Grade Resilience Policy for Core Banking API Calls
+// - Handles transient failures (5xx, 408)
+// - Implements exponential backoff retry (3 attempts)
+// - Circuit breaker pattern to prevent cascading failures
+var retryPolicy = HttpPolicyExtensions
+    .HandleTransientHttpError()
+    .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
+var circuitBreakerPolicy = HttpPolicyExtensions
+    .HandleTransientHttpError()
+    .CircuitBreakerAsync(5, TimeSpan.FromSeconds(30));
+
 // Register HttpClient for API integrations with Wekeza Core Banking
-builder.Services.AddHttpClient<IComprehensiveWekezaApiClient, ComprehensiveWekezaApiClient>();
-builder.Services.AddHttpClient<IWekezaCoreApiClient, WekezaCoreApiClient>();
-builder.Services.AddHttpClient<IMvp40ApiClient, Mvp40ApiClient>();
+// Each client has resilience policies for production-grade reliability
+builder.Services.AddHttpClient<IComprehensiveWekezaApiClient, ComprehensiveWekezaApiClient>()
+    .AddPolicyHandler(retryPolicy)
+    .AddPolicyHandler(circuitBreakerPolicy);
+
+builder.Services.AddHttpClient<IWekezaCoreApiClient, WekezaCoreApiClient>()
+    .AddPolicyHandler(retryPolicy)
+    .AddPolicyHandler(circuitBreakerPolicy);
+
+builder.Services.AddHttpClient<IMvp40ApiClient, Mvp40ApiClient>()
+    .AddPolicyHandler(retryPolicy)
+    .AddPolicyHandler(circuitBreakerPolicy);
 
 // Register Core Services
 builder.Services.AddScoped<ITransactionCategorizationService, TransactionCategorizationService>();
