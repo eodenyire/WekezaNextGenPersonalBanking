@@ -28,7 +28,6 @@ builder.Services.AddSwaggerGen(options =>
 // - Circuit breaker pattern to prevent cascading failures
 var retryPolicy = HttpPolicyExtensions
     .HandleTransientHttpError()
-    .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
     .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
 var circuitBreakerPolicy = HttpPolicyExtensions

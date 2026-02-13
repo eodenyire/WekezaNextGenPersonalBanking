@@ -61,7 +61,7 @@ public class HealthController : ControllerBase
                 async () => await _mvp40ApiClient.GetAccountDetailsAsync("health-check"))
         };
 
-        var connectedCount = apiResults.Count(api => api.status == "connected");
+        var connectedCount = apiResults.Count(api => api.Status == "connected");
         var overallStatus = connectedCount == 3 ? "all_healthy" 
             : connectedCount > 0 ? "partial" 
             : "degraded";
@@ -160,11 +160,11 @@ public class HealthController : ControllerBase
 
             return new ApiHealthResult
             {
-                name = apiName,
-                description = description,
-                status = status,
-                responseTime = $"{duration:F0}ms",
-                lastChecked = DateTime.UtcNow
+                Name = apiName,
+                Description = description,
+                Status = status,
+                ResponseTime = $"{duration:F0}ms",
+                LastChecked = DateTime.UtcNow
             };
         }
         catch (Exception ex)
@@ -173,24 +173,24 @@ public class HealthController : ControllerBase
             
             return new ApiHealthResult
             {
-                name = apiName,
-                description = description,
-                status = "unreachable",
-                error = "API not responding or not running",
-                message = "This is expected if core banking API is not started",
-                lastChecked = DateTime.UtcNow
+                Name = apiName,
+                Description = description,
+                Status = "unreachable",
+                Error = "API not responding or not running",
+                Message = "This is expected if core banking API is not started",
+                LastChecked = DateTime.UtcNow
             };
         }
     }
 
     private class ApiHealthResult
     {
-        public string name { get; set; } = "";
-        public string description { get; set; } = "";
-        public string status { get; set; } = "";
-        public string? responseTime { get; set; }
-        public string? error { get; set; }
-        public string? message { get; set; }
-        public DateTime lastChecked { get; set; }
+        public string Name { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string Status { get; set; } = "";
+        public string? ResponseTime { get; set; }
+        public string? Error { get; set; }
+        public string? Message { get; set; }
+        public DateTime LastChecked { get; set; }
     }
 }
