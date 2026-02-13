@@ -24,7 +24,7 @@ public class Transaction
     public string? ChequeNumber { get; set; }
     public string? DrawerBank { get; set; }
     
-    public DateTime ProcessedAt { get; set; } = DateTime.UtcNow;
+    public DateTime ProcessedAt { get; set; }
     public string ProcessedBy { get; set; } = "System";
     
     // NextGen-specific fields for AI categorization

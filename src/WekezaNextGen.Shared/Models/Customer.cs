@@ -37,6 +37,6 @@ public class Customer
     public bool OptInSMS { get; set; } = true;
     public bool OptInEmail { get; set; } = true;
     
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }
